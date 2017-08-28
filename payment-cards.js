@@ -117,7 +117,7 @@ var PaymentCards = function () {
             var spacing = getSpacing(inputValue) || defaultSpacing;
             return addSeparators(inputValue, spacing, ' ');
         });
-        restrictNumeric(expiryInput, 4, function (inputValue) {
+        restrictNumeric(expiryInput, 6, function (inputValue) {
             return addSeparators(inputValue, [2], '/');
         });
         restrictNumeric(cvnInput, 4);
@@ -150,11 +150,12 @@ var PaymentCards = function () {
         if (expiry.length == 0) {
             return e(expiry, 'empty');
         }
-        if (expiry.length != 4) {
+        split = expiry.split(/\D/g);
+        if (split.length != 2 || split[0].length != 2) {
             return e(expiry, 'invalid', 'bad format');
         }
-        month = parseInt(expiry.slice(0, 2), 10);
-        year = parseInt(expiry.slice(2), 10);
+        month = parseInt(split[0], 10);
+        year = parseInt(split[1], 10);
         if (month % 1 !== 0) {
             return e(expiry, 'invalid', 'not an integer', 'month');
         }
@@ -166,7 +167,7 @@ var PaymentCards = function () {
         }
         var currentDate = new Date();
         var currentYear = currentDate.getFullYear();
-        year = year + Math.floor(currentYear / 100) * 100;
+        if (year < 100) year = year + Math.floor(currentYear / 100) * 100;
         if (year < currentYear) {
             return e(expiry, 'invalid', 'in the past', 'year');
         }
@@ -176,7 +177,7 @@ var PaymentCards = function () {
                 return e(expiry, 'invalid', 'in the past', 'month');
             }
         }
-        return e(expiry, 'valid');
+        return e(expiry.replace(/\D/g, ''), 'valid');
     }
 
     function checkCard(pan, expiry, cvn) {
@@ -213,7 +214,7 @@ var PaymentCards = function () {
     Form.prototype.check = function () {
         var r = checkCard(
             this.inputs.pan.value.replace(/\D/g, ''),
-            this.inputs.expiry.value.replace(/\D/g, ''),
+            this.inputs.expiry.value,
             this.inputs.cvn.value.replace(/\D/g, '')
         );
         r.brand = r.range ? r.range.brand : null;
