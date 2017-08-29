@@ -125,6 +125,8 @@ If you've seen a card with more than 16 digits or with different spacing, let us
 - `PaymentCards.luhnCheck(num)`
 - `PaymentCards.restrictNumeric(input, maxLength, formatter)`
 
+Note: unlike some other implementations we've seen our `restrictNumeric` function does not prevent the user from pasting into the restricted `<input>`, nor from using text selection to modify its content.
+
 ## License
 
 [CC0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/)
