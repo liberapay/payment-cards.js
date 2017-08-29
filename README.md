@@ -4,9 +4,9 @@ Dependencies: none (not even jQuery).
 
 Compatibility: obsolete browsers are not supported. For example IE ≤ 8 are not, because they don't have [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
 
-## About Accuracy
+## Accuracy Warning
 
-Due to the lack of accurate and comprehensive official sources, the validation of card data and the detection of a card's brand should not be blindly trusted.
+Due to the lack of accurate and comprehensive public information, the validation of card data and the detection of a card's brand should not be blindly trusted.
 
 Validity checks are only meant to help detect input errors early: you should warn your users when the data they have input appears to be invalid, but you should not prevent them from submitting that data.
 
