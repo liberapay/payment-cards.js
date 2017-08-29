@@ -76,12 +76,19 @@ var PaymentCards = function () {
         if (!input.addEventListener) return;
         input.addEventListener('keypress', function(e) {
             if (e.metaKey || e.ctrlKey || e.which < 32) {
+                // Don't interfere with things like copy-pasting
                 return;
             }
             if (input.value.replace(/\D/g, '').length === maxLength) {
+                // Enforce maxLength
+                if (input.selectionStart != input.selectionEnd) {
+                    // Allow overwriting selected digits
+                    return;
+                }
                 return e.preventDefault();
             }
             if (/^\d+$/.test(String.fromCharCode(e.which)) == false) {
+                // Reject non-numeric characters
                 return e.preventDefault();
             }
         }, false);
