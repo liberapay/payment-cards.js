@@ -92,7 +92,19 @@ var PaymentCards = function () {
             var newValue = input.value;
             var newValueFormatted = formatter(newValue.replace(/\D/g, ''));
             if (newValueFormatted != newValue) {
+                var pos = input.selectionStart;
                 input.value = newValueFormatted;
+                if (pos == newValue.length) return;
+                // Restore cursor position
+                // To determine the correct offset we count the number of digits
+                // up to the cursor position, then we loop through the new
+                // formatted string until we reach the same number of digits.
+                pos = newValue.slice(0, pos).replace(/\D/g, '').length;
+                var newPos = 0, len = newValueFormatted.length;
+                for (var nDigits = 0; newPos < len && nDigits < pos; newPos++) {
+                    if (/\d/.test(newValueFormatted.charAt(newPos))) nDigits++;
+                }
+                input.selectionStart = newPos; input.selectionEnd = newPos;
             }
         }, false);
     }
