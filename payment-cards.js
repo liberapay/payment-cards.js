@@ -125,9 +125,9 @@ var PaymentCards = function () {
             parts.push(string.slice(j, positions[i]));
             j = positions[i];
         }
-        // This adds whatever's left, it can be an empty string, in which case
-        // the string will have a separator at the end
-        parts.push(string.slice(j));
+        // This adds whatever's left, unless it's an empty string
+        var leftover = string.slice(j);
+        if (leftover.length > 0) parts.push(leftover);
         return parts.join(separator);
     }
 
