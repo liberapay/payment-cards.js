@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>payment-cards.js</title>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            background-color: #fff;
+            color: #000;
+            font-family: Verdana;
+            font-size: 16px;
+        }
+        body {
+            overflow-y: scroll;
+        }
+        .container {
+            margin: 0 auto;
+            max-width: 780px;
+        }
+        noscript {
+            background-color: #f2dede;
+            color: #555;
+            display: block;
+            font-weight: bold;
+            padding: 0.5em 0.8em;
+        }
+        .warning {
+            background-color: #fcf8e3;
+            color: #555;
+            display: block;
+            font-weight: bold;
+            padding: 0.5em 0.8em;
+        }
+        pre {
+            font-size: 14px;
+        }
+        .payment-card {
+            background-color: #eaeaea;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            height: 171px;
+            margin-bottom: 1em;
+            padding-top: 42px;
+            position: relative;
+            width: 270px;
+        }
+        .payment-card input {
+            width: 100%;
+        }
+        .pan {
+            margin-bottom: 10px;
+            padding: 0 15px;
+        }
+        .expiry, .cvn {
+            float: left;
+            padding: 0 15px;
+            width: 50%;
+        }
+        .brand {
+            color: #888;
+            padding: 3px 6px;
+            position: absolute;
+            right: 15px;
+            top: 5px;
+        }
+        .brand:empty {
+            display: none;
+        }
+        input.abnormal {
+            box-shadow: #faebcc 0 0 2px 2px;
+        }
+        input.invalid {
+            box-shadow: red 0 0 1.5px 1px;
+        }
+        input.valid {
+            box-shadow: green 0 0 1.5px 1px;
+        }
+        input:focus {
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>payment-cards.js</h1>
+
+    <p>payment-cards.js provides formatting, validation, and brand detection for payment card forms. For the documentation see <a href="https://github.com/liberapay/payment-cards.js">the repository on GitHub</a>.</p>
+
+    <h2>Demo</h2>
+
+    <noscript>JavaScript is required</noscript>
+
+    <p class="warning">You should avoid inputting real card data in this form.</p>
+
+    <form id="card" action="javascript:" method="POST">
+
+        <div class="payment-card">
+            <div class="pan">
+                <input id="pan" class="form-control" required autocomplete="cc-number"
+                       placeholder="Card number" />
+            </div>
+
+            <div class="expiry">
+                <input id="expiry" class="form-control" required autocomplete="cc-exp"
+                       placeholder="MM/YY" />
+            </div>
+
+            <div class="cvn">
+                <input id="cvn" class="form-control" required autocomplete="cc-csc"
+                       placeholder="CVN" />
+            </div>
+
+            <div class="brand"></div>
+        </div>
+
+        <pre id="json-dump"></pre>
+
+    </form>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="payment-cards.js"></script>
+<script>
+
+    var cardForm;
+
+    function clearInvalid($form) {
+        $form.find('.invalid').removeClass('invalid');
+        $form.find('.abnormal').removeClass('abnormal');
+    };
+
+    function setValidity($input, validity) {
+        $input.toggleClass('invalid', validity == 'invalid');
+        $input.toggleClass('abnormal', validity == 'abnormal');
+    };
+
+    function updateValidity(card) {
+        clearInvalid($('form#card'));
+        setValidity($('input#pan'), card.pan.status || 'abnormal');
+        setValidity($('input#expiry'), card.expiry.status);
+        setValidity($('input#cvn'), card.cvn.status || 'valid');
+    }
+
+    function dump(card) {
+        function replacer(key, value) {
+            if (value instanceof RegExp) {
+                return value.toString();
+            }
+            return value;
+        }
+        var r = JSON.stringify(card, replacer, 4);
+        return r.replace(/\[(\s+\d+,)*(\s+\d+)?\s*\]/g, function (m) {
+            return m.replace(/\s+/g, ' ');
+        });
+    }
+
+    function updateOutput(card) {
+        $('.brand').text(card.brand);
+        $('pre#json-dump').text('card = ' + dump(card));
+    }
+
+    $(function() {
+        $('input[title]').each(function () {
+            var $input = $(this);
+            $('<span class="tooltip">').text($input.attr('title')).insertAfter($input);
+        });
+
+        $('form#card').submit(function (e) { e.preventDefault(); return false; })
+
+        cardForm = new PaymentCards.Form(
+            document.querySelector('input#pan'),
+            document.querySelector('input#expiry'),
+            document.querySelector('input#cvn')
+        );
+
+        function onBlur() {
+            updateValidity(cardForm.check());
+        }
+        cardForm.inputs.pan.addEventListener('blur', onBlur);
+        cardForm.inputs.expiry.addEventListener('blur', onBlur);
+        cardForm.inputs.cvn.addEventListener('blur', onBlur);
+
+        function onInput() {
+            updateOutput(cardForm.check());
+        }
+        cardForm.inputs.pan.addEventListener('input', onInput);
+        cardForm.inputs.expiry.addEventListener('input', onInput);
+        cardForm.inputs.cvn.addEventListener('input', onInput);
+
+        onInput();
+    });
+</script>
+
+</body>
+</html>
