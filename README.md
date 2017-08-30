@@ -4,6 +4,10 @@ Dependencies: none (not even jQuery).
 
 Compatibility: obsolete browsers are not supported. For example IE ≤ 8 are not, because they don't have [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
 
+## Demo
+
+You can test payment-cards.js on <https://liberapay.github.io/payment-cards.js/>.
+
 ## Accuracy Warning
 
 Due to the lack of accurate and comprehensive public information, the validation of card data and the detection of a card's brand should not be blindly trusted.
