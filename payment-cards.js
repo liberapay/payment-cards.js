@@ -35,7 +35,7 @@ var PaymentCards = function () {
         },
         {
             brand: 'Maestro',
-            pattern: /^(50|5[6-8]|6)/,
+            pattern: /^(50|5[6-8]|6[0-1|3-4|6-9])/,
             spacing: defaultSpacing,
             panLengths: [12, 13, 14, 15, 16, 17, 18, 19],
             cvnLengths: [3]
@@ -43,6 +43,13 @@ var PaymentCards = function () {
         {
             brand: 'MasterCard',
             pattern: /^(5[1-5]|222[1-9]|2[3-6]|27[0-1]|2720)/,
+            spacing: defaultSpacing,
+            panLengths: [16],
+            cvnLengths: [3]
+        },
+        {
+            brand: 'UnionPay',
+            pattern: /^62/,
             spacing: defaultSpacing,
             panLengths: [16],
             cvnLengths: [3]
