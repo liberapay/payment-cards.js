@@ -111,6 +111,7 @@ The current `brand` strings are:
 - `JCB`
 - `Maestro`
 - `MasterCard`
+- `UnionPay`
 - `Visa`
 
 We currently have two `spacing` arrays:

@@ -48,6 +48,13 @@ var PaymentCards = function () {
             cvnLengths: [3]
         },
         {
+            brand: 'UnionPay',
+            pattern: /^62/,
+            spacing: defaultSpacing,
+            panLengths: [16],
+            cvnLengths: [3]
+        },
+        {
             brand: 'Visa',
             pattern: /^4/,
             spacing: defaultSpacing,
@@ -57,14 +64,19 @@ var PaymentCards = function () {
     ];
 
     function getRange(cardNumber) {
-        var range, j, len;
+        var range, j, len, matchLen, bestMatch, bestMatchLength = 0;
         cardNumber = (cardNumber + '').replace(/\D/g, '');
         for (j = 0, len = rangesArray.length; j < len; j++) {
             range = rangesArray[j];
             if (range.pattern.test(cardNumber)) {
-                return range;
+                matchLen = range.pattern.exec(cardNumber)[0].length;
+                if (matchLen > bestMatchLength) {
+                    bestMatch = range;
+                    bestMatchLength = matchLen;
+                }
             }
         }
+        return bestMatch;
     }
 
     function getSpacing(cardNumber) {
