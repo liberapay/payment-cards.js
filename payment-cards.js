@@ -35,7 +35,7 @@ var PaymentCards = function () {
         },
         {
             brand: 'Maestro',
-            pattern: /^(50|5[6-8]|6[0-1|3-4|6-9])/,
+            pattern: /^(50|5[6-8]|6)/,
             spacing: defaultSpacing,
             panLengths: [12, 13, 14, 15, 16, 17, 18, 19],
             cvnLengths: [3]
@@ -64,14 +64,19 @@ var PaymentCards = function () {
     ];
 
     function getRange(cardNumber) {
-        var range, j, len;
+        var range, j, len, matchLen, bestMatch, bestMatchLength = 0;
         cardNumber = (cardNumber + '').replace(/\D/g, '');
         for (j = 0, len = rangesArray.length; j < len; j++) {
             range = rangesArray[j];
             if (range.pattern.test(cardNumber)) {
-                return range;
+                matchLen = range.pattern.exec(cardNumber)[0].length;
+                if (matchLen > bestMatchLength) {
+                    bestMatch = range;
+                    bestMatchLength = matchLen;
+                }
             }
         }
+        return bestMatch;
     }
 
     function getSpacing(cardNumber) {
