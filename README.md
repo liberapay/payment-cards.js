@@ -1,6 +1,6 @@
 payment-cards.js provides formatting, validation, and brand detection for payment card forms.
 
-Dependencies: none (not even jQuery).
+Dependencies: only jQuery.
 
 Compatibility: obsolete browsers are not supported. For example IE ≤ 8 are not, because they don't have [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
 
