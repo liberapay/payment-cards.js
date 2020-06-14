@@ -4,9 +4,9 @@ Dependencies: none (not even jQuery).
 
 Compatibility: obsolete browsers are not supported. For example IE ≤ 8 are not, because they don't have [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
 
-Maturity: payment-cards.js is used in production.
+Maturity: payment-cards.js is stable and has been used in production.
 
-Maintenance: this project is maintained by the Liberapay team, you can [donate](https://liberapay.com/Liberapay/donate) to fund this work.
+Maintenance: we haven't been using payment-cards.js since we switched to [Stripe](https://stripe.com/), so it's not actively maintained by us. However, we still accept and review pull requests.
 
 ## Demo
 
@@ -134,7 +134,7 @@ If you've seen a card with more than 16 digits or with different spacing, let us
 - `PaymentCards.luhnCheck(num)`
 - `PaymentCards.restrictNumeric(input, maxLength, formatter)`
 
-Note: unlike some other implementations we've seen our `restrictNumeric` function does not prevent the user from pasting into the restricted `<input>`, nor from using text selection to modify its content.
+Note: unlike some other implementations we've seen, our `restrictNumeric` function does not prevent the user from pasting into the restricted `<input>`, nor from using text selection to modify its content.
 
 ## License
 
